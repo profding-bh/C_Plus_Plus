@@ -345,6 +345,42 @@ string s;
 
 const char* kings[] = {"Antigonus","Swel","Ptolme"};
 
+const c = 7;//error:no type
+
+gt(int a ,int b)//error:no return type
+{
+	return (a>b)?a:b;
+}
+
+
+unsigned ui;//ok
+long li;// ok
+
+int x,y//int x,int y;
+
+int*p ,y;// int *p,int y;not int* y;
+
+int x ,*q;// int x,int *q;
+
+int v[10],*pv;// int v[10], int *pv;
+
+
+int x;//global x
+void
+f()
+{
+	int x;// local x hides global x 
+	x = 1;// assign to local x
+	{
+		int x;// hides first local x
+		x = 2;// assign to second local x
+
+	}
+	x = 3;// assign to first local x
+}
+
+
+int* p = &x;// take address of global x
 
 
 
@@ -354,6 +390,44 @@ const char* kings[] = {"Antigonus","Swel","Ptolme"};
 
 
 
+
+
+int x;
+void f2()
+{
+	int x = 1;// hide global x
+	::x = 2;// assign to global x
+	x = 2;// assign to local x
+}
+
+
+int x = 97;
+void
+f3()
+{
+	int x = x;// perverse:initialize x with it own(uninitialize )value	
+}
+
+
+
+int x = 11;
+void
+f4()
+{
+	int y = x; // use global x: y = 11
+	int x = 22;
+	y = x;//use local x:y = 22
+}// such subtleties are best avoided
+
+
+
+
+void
+f5(int x)
+{
+	int x; //error
+}// The names of function arguments are considered declared in the outermost block of
+	// a function.
 
 
 

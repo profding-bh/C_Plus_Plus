@@ -8,6 +8,9 @@ public:
 	int b;
 };
 
+
+int x;
+
 int 
 main()
 {
@@ -22,5 +25,18 @@ main()
 	A b;
 	b.b = 45;
 	cout<<b.b<<endl;
+
+int x;
+	::x = 3;
+	x = 1;
+{
+	int x = 2;
+	cout<<x<<endl;// There is no way to use a hidden local name ,e.g.:x
+}
+	cout<<x<<' ' << ::x<<endl;
+
 	return 0;
+
+
+	
 }
