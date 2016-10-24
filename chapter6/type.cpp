@@ -430,6 +430,16 @@ f5(int x)
 	// a function.
 
 
+void
+f(vector<string>& v,list<int>& lst)
+{
+	for(const auto& x:v) cout<<x<<endl;
+	for(auto x:lst) cout<<x<<endl;
+	for(int i = 0; i != v.size();++i) cout<< v[i]<<endl;
+	for(auto i:{1,2,3,4}) cout<<i<<endl;
+}
+
+
 
 
 
