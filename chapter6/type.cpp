@@ -442,7 +442,306 @@ f(vector<string>& v,list<int>& lst)
 
 
 
+X a1 {v};
+X a2 =  {v};
+X a3  = v;
+X a4(v);
+// of these,only the first can be used in every context.
+// Old habits die hard. so I sometimes use = when initializing a simple 
+// variable with a simple value.
 
+int x1 = 0;
+char c1 = 'z';
+
+//Initialization using {}, list initialization, does not allow narrowing.
+// That is:
+//1) An integer  cannot be converted to another integer that cannot hold 
+// its value.For example,char to int is allowed,but not int to char.
+//2) A floating-point value cannot be  converted to another floating-point type
+// that cannot hold its value.For example, float to double is allowed,but not
+// double to float
+// 3)An integer vlaue cannot be converted to a  floating-point type.
+
+
+void
+f(double val,int val2)
+{
+	int x2 = val; // if val == 7.9,x2 becomes 7
+
+	char c2 = val2;// if val2 == 1025,c2 becomes 1
+	
+	int x3 {val};// error:possible truncation
+	char c3 {val2};// error:possible narrowing
+
+	char c4 {24};// OK: 24 can be represented exactly as a char
+	char c5 {264};// error(assumeing 8-bit chars):cannot be represented as a char
+	
+	int x4 {2.0};// error:no double to int value conversion
+
+	//...
+} 
+
+auto z1 {99};// z1 is an initializer_list<int>
+auto z2 = 99;// z2 is an int
+//看到差别了吧!
+// so prefer = when using auto
+
+
+vector<int> v1 {99};// v1 is a vector of 1 element with the value 99
+vector<int> v2(99);// v2 is a vector of 99 elements each with the default value 0
+
+vector<string> v1{"hello!"};// v1 is a vector of 1 element with the value "hello!"
+vector<string> v2("hello!");// error:no vector constructor takes a string literal
+
+// the empty initializer list,{},is used to indicate that a default vlaue is desired.
+//
+int x4 {};// x4 becomes 0
+double d4 {};// d4 becomes 0.0
+char* p {};// p becomes nullptr
+vector<int> v4{};//v4 becomes the empty vector
+string s4{};// s4 becomes ""
+
+
+if no initializer is specified, a global,namespace,local static,or static 
+member(collectively called static objects) is initialized to {} of the
+appropriate type.
+
+
+int a;// means "int a{};"so that a becomes 0
+
+double d;// means "double d{};",so that d becomes 0.0
+
+
+free store: 堆区
+
+void
+f()
+{
+	int x;// x does not have a well-defined value
+	char buf[1024];// buf[i] does not have a well-defined value
+
+
+	int* p{new int};// *p does not have a well-defined value
+	char* q {new char[1024]};//q[i]does not have a well-defined value
+	
+	string s; // s == "" because of string's default constructor
+	vector<char> v; // v == {} because of vector's default constructor
+
+
+	string* ps {new string}; //*ps is "" because of string's default constructor
+
+	//看到没有 可以 *string对象
+
+
+ 	
+
+}
+// if you want initialization of local variable of bulit-in type or objects of 
+// built-in type created with new,use{}.
+
+void
+ff()
+{
+	int x {};// x becomes 0
+	char buf[1024]{};  //buf[i] becomes 0 for all i
+
+
+	int * p {new int{10}};// *p becomes 10
+	char* q {new char[1024]{}};// q[i] becomes 0 for all i
+	
+}
+
+
+//in some cases, function-style argument lists can be used 
+
+// for example:
+complex<double> z(0,pi);// use constructor
+vector<double> v(10,3,3);// use constructor:v gets 10 element initialized to 3.3
+
+
+
+complex<double> z1(1,2);//function-style initializer(initialization by construcor)
+complex<double>  f1();// function declaration
+
+
+complex<double> z2 {1,2};// initialization by constructor to {1,2}
+
+complex<double> f2 {};// initialization by constructor to the default value {0,0}
+
+
+
+auto x1 {1,2,3,4};// x1 is an initializer_list<int>
+auto x2 {1.0,2.25,3.5};// x2 is an initializer_list of<double>
+
+
+auto x3 {1.0,2};// error:cannot deduce the type of {1.0,2}
+
+
+int a1= 123;
+char a2 = 123;
+auto a3 = 123;// the type of a3 is "int"
+
+template<class T> 
+void f1(vector<T>& arg)
+{
+	for(vector<T>::iterator p = arg.begin();p != arg.end;++p)
+		*p = 7;
+
+	for(auto p = arg.begin();p != arg.end();++p)
+		*p = 7;
+}
+
+// The loop using auto is the more convenient to write and the easier to read.
+
+
+void
+f(double d)
+{
+	constexpr auto max = d+7;
+	int a[max];// error: array bound not an integer
+	//
+}
+
+void 
+f(vector<int>& v)
+{
+	for(const auto& x:v){ // x is a const int&
+		///..
+	}
+}
+// Note that the type of an expression is never a reference because references
+// are implicitly dereferenced in expressions.
+
+void
+g(int& v)
+{
+	auto x = v;// x is an int(not an int&)
+	auto& y = v; // y is an int&
+}
+
+
+
+char v1 = 123456;// 123456 is an int
+int v2 = 'c';// 'c' is a char
+
+T v3 = f();
+
+char v1 {12345};// error:narrowing
+int v2 {'c'};//fine:implicit char ->int conversion
+T v3 {f()}; // works iff the type of f() can be implicitly converted to a T
+
+
+auto v1 = 12345;// v1 is an int
+auto v2 = 'c';// v2 is a char
+auto v3  = f();// v3  is of some appropriate type
+
+auto v1 {12345};// v1 is a list of int
+auto v2 {'c'}; // v2 is a list of char
+auto v3 {f()};// v3 is a list of  some appropriate type
+
+
+
+auto x0 {};// error:cannot deduce a type
+auto x1 {1};// list of int with one element
+auto x2 {1,2};//  list of int with two elements
+auto x3 {1,2,3}; // list of int with three elements
+
+
+//the type of a homogeneous list of elements of type T is taken to be of type 
+// initializer_list<T>
+
+
+template<class T, class U>
+auto operator+(const Matrix<T>& a,const Matrix<U>& b)->Matrix<decltype(T{}+U{})>;
+
+
+
+
+
+template<class T, class U>
+auto operator+(const Matrix<T>& a,const Matrix<U>& b)->Matrix<decltype(T{}+U{})>
+{
+	Matrix<decltype(T{}+U{})> res;
+	for(int i = 0; i != a.rows();++i)
+		for(int j = 0;j != a.cols();++j)
+			res(i,j) += a(i,j)+b(i,j);
+	return res;
+}
+
+
+
+
+// an object is contiguous region of storage.
+
+//lvalue can refer to a constant
+
+// using "m" for movable,and "i" for has identity
+
+
+
+prvalue "pure rvalue"
+glvalue "generalized lvalue"
+
+xvalue "x" for "extraordinary" or "expert only"
+
+
+void
+f(vector<string>& vs)
+{
+	vector<string>& v2 = std::move(vs);//move vs to v2
+}
+
+
+
+// Type aliases
+using Pchar = char*;// Pointer to character
+using PF= int(*)(double); // pointer to function taking a double and returning an int
+
+
+// similar types can define the same name as a member alias:
+
+template<class T>
+class vector{
+	using value_type = T;// every container has a value_type
+	//...
+};
+
+
+
+template<class T>
+class list{
+	using value_type = T;// every container has a value_type
+	//...
+};
+
+Pchar p1 = nullptr;// p1 is a char*
+char* p3 = p1;// fine
+
+
+
+
+
+typedef int int32_t; // equivalent to "using  int32_t = int;"
+
+typedef short int16_t;// // equivalent to "using  int16_t = short;"
+
+typedef void (*PtoF)(int);// equivalent to "using  PtoF = void (*)(int);"
+
+
+
+
+using int32_t = long;
+
+// The "_t" suffix is conventional for aliases("typedefs")
+
+
+template<typename T>
+	using Vector = std::vector<T,My_allocator<T>>;
+
+// we cannot apply type specifiers,such as unsigned , to an alias.
+using Char = char;
+using Uchar = unsigned Char;// error
+using Uchar = unsigned char;// ok
 
 
 
