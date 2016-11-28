@@ -19,4 +19,6 @@ result is identical to that of the simple order of execution.
 
 Statement Summary:
 
-
+statement:
+	declaration
+	

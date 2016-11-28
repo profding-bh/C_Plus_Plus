@@ -380,8 +380,149 @@ int bads[3,5];// error:comma not allowed in constant expression
 
 
 
+/*
+
+C++ offers two related meanings of "constant";
+1) constexpr: Evaluate at compile time;
+2) const: Do not modify in this scope.
+
+constexpr's role is to enable and ensure compile-time evaluation,
+
+whereas const's primary role is to specify immutability in interfaces.
+
+Many objects don't have their values changed after initialization:
+
+1)symbolic constants lead to more maintainable code than using literals directly in code.
+2)Many pointers are often read through but never written through.
+3) Most function parameters are read but not written to.
 
 
+*/
+const int model = 90; // model is a const
+const int v[] ={1,2,3,4};// v[i] is a const
+const int x; // error: no initializer
+// Because an object declared cannot be assigned to,it must be initialized.
+
+
+void
+f()
+{
+	model = 200;//error
+	v[2] = 3;//error
+}
+
+
+void
+g(const X* p)// p是可变的,*p不可以变
+{
+	// can't modify *p here
+}
+
+
+void
+h()
+{
+	X val; // val can be modified here.
+	g(&val);
+//..
+}
+
+
+/*
+When using a pointer, two objects are  involved:the pointer itself and
+the object pointed to.
+
+
+"Prefixing" a declaration of a pointer with const makes the object,but not the pointer,a constant.
+e.g.:
+const X* p;// *p is a constant
+
+
+To declare a pointer itself,rather than the object pointed to,to be a constant,
+we use the declarator operator *const instead of plain *.
+e.g.:
+X *const p; // p is a constant
+
+*/
+
+
+void
+f1(char* p)
+{
+	char s[] = "Gorm";
+	
+	const char* pc = s; // pointer to constant
+	pc[3] = 'g';// error: pc pointers to constant
+	pc = p;//ok
+
+	char *const cp = s; //constant pointer
+	cp[3] = 'a'; //ok
+	cp = p;//error:cp is constant
+
+
+	const char *const cpc = s;// constant pointer to const
+	cpc[3] = 'a'; //error: cpc  points to constant
+	cpc = p;// error:cpc is constant
+}
+
+/*
+the declarator operator that makes a pointer constant is *const.
+
+There is no const* declarator operator, so a const  appearing before the *
+is taken to be part of the base type.
+
+char *const cp; // const pointer to char
+char const* pc; // pointer to const char
+const char* pc2 // pointer to const char
+*/
+
+const char* strchr(const char*p, char c); // find first occurrence of c in p
+char* strchr(char* p, char c); 		//	find first occurrence of c in p
+
+void
+f4()
+{
+
+	int a = 1;
+	const int c = 2;
+	const int* p1 = &c; // ok
+	const int* p2 = &a; // ok
+	
+	int* p3 = &c;//error: initialization of int* with const int*
+	*p3 = 7;// try to change the value of c
+}
+
+
+/*
+Pointers and Ownership:
+*/
+/*
+It is usually a good idea  to immediately place a pointer that represents ownership in 
+a resource handle class,such as vector,string,and unique_ptr.That way,
+we can assume that every pointer that is not within a resource handle is not an owner 
+and must not be deleted.
+*/
+
+void 
+confused(int* p)
+{
+//	delete p??
+}
+
+int global {7};
+
+ 
+void
+f()
+{
+	X* pn = new int{7};
+	int i {7};
+	
+	int q = &i;
+	confused(pn);
+	confused(q);
+	confused(&global);
+}
 
 
 
