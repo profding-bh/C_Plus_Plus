@@ -524,6 +524,165 @@ f()
 	confused(&global);
 }
 
+//Like a pointer, a reference is an alias for an object.
+
+template<class T>
+class vector{
+	T* elem;
+	//...
+	public:
+	T& operator[](int i){return elem[i];} // return reference to element
+	const T& operator[](int i) const {return elem[i];}  // return reference to const element 
+
+	void push_back(const T& a);// pass element to be added by reference
+//...
+};
+
+
+void
+f(const vector<double>& v)
+{
+	double d1 = v[1]; // copy the value of the double referred to by v.operator[](1) into d1
+	v[2] = 7;// place 7 in the double  referred to by the result of v.operator[](2) ???
+
+	v.push_back(d1);// give push_back()	 a reference to d1 to work with
+}
+
+/*
+
+to reflect the lvalue/rvalue and const/non-const distinctions, there are three kinds of references:
+
+<1> lvalue references: to  refer to objects whose vlaue we want to  change
+<2> const references:  to  refer to objects whose vlaue we do not want to  change(e.g.: a constant)
+<3> rvalue references: to  refer to objects whose vlaue we do not need to perserve after we have used it(e.g.:a temporary)
+
+
+collectively, they are  called references. The first two are both called  lvalue references.
+*/
+
+
+/*
+
+In  a type name,the notation X&  means"reference to X"
+
+
+*/
+
+void
+f()
+{
+	int var = 1;
+	int& r {var}; // r and var now refer to the same int
+	int x = r; // x becomes 1
+
+	r = 2;// var becomes 2
+}
+
+
+int var = 1;
+int& r1 {var};//ok:r1 intialized
+int& r2;// error:initializer missing
+extern int& r3;// ok:r3 initialized elsewhere
+
+
+void
+g()
+{
+	int var = 0;
+	int& rr {var};
+	++rr;// var is incremented to 1
+	int* pp = &rr;//pp points to var
+}
+
+/* 
+to get a pointer to the object denoted by a reference rr,
+we can write &rr
+
+we cannot define an array of references.In that sense, a reference is not an object.
+
+
+*/
+
+
+double& dr = 1;//error:lvalue needed ???
+
+const double& cdr {1};//ok
+
+double temp = double{1}; // first create a temporary with the right vlaue
+const double& cdr {temp};// then use the temporary as the initializer for cdr
+
+
+void
+increment(int& aa)
+{
+	++aa;
+}
+
+void
+f()
+{
+	int x = 1;
+	increment(x);// x = 2
+}
+
+
+
+int next(int p){return p+1;}
+
+void
+g()
+{
+	int x = 1;
+	increment(x);// x = 2
+	x = next(x); // x= 3
+}
+template<class K,class V>
+class Map{ // a simple map class
+	public:
+	V& operator[](const K& v);// return  the vlaue corresponding to the key v
+	
+	pair<K,V>* begin() {return &elem[0];}
+	pair<K,V>* end() {return &elem[0]+elem.size();}// ??会不会相差一? 验证一下.
+private:	
+	vector<pair<K,V>> elem;//{key,value} pairs
+}
+
+
+/*
+The standard-library map is typically implemented as a red-black tree.
+*/
+
+template<class K,class V>
+V& Map<K,V>::operator[](const K& k)
+{
+	for(auto& x:elem)
+		if(k == x.first)
+			return x.second;
+	elem.push_back({k,V{}});// add pair at end
+	return elem.back().second;//return the (default) value of the new element
+}
+
+
+int 
+main()
+{
+	Map<string,int> buf;
+	
+ 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
