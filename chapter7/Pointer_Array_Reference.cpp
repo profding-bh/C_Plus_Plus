@@ -674,11 +674,218 @@ main()
 
 
 
+/*
+
+1) A non-const lvalue reference refers to an object, to which the user of
+the reference can write.
+
+2) A const lvalue reference refers to a constant,which is immutable from
+the point of view of the user of the reference.
+
+3) An  rvalue reference refers to a temporary object,which the user of 
+the  reference can (and typically will) modify,assuming that the object will
+never be used again.
 
 
 
 
 
+	An rvalue reference can  bind to an rvalue,but not to an lvalue.
+
+	In that ,an rvalue reference is  exactly opposite to an lvalue reference.
+	
+*/
+
+
+string var {"Cambridge"};
+string f();
+string& r1 {var}; //  lvalue reference,bind r1 to var(an lvalue)
+string& r2 {f()}; // lvalue reference,error:f() is an rvalue
+string& r3 {"Princeton"}; // lvalue reference,error:cannot bind to temporary
+
+string&& rr1 {f()}; // rvalue reference,fine: bind rr1 to  rvalue(a temporary)
+string&& rr2 {var}; //  rvalue reference,error: var is an lvalue.
+string&& rr3 {"Oxford"}; // rr3 refers to a temporary holding "Oxford"
+
+
+const string cr1& {"Harvard"}; // ok: make temporary and bind to cr1
+
+The && declarator operator means "rvalue reference" 
+
+
+// Both a const lvalue reference and an rvalue reference can bind to an rvalue.
+string 
+f(string&& s)
+{
+	if(s.size())
+	 s[0] = toupper(s[0]);
+	return s;
+}
+
+
+template<class T>
+swap(T& a,T& b)// "old-style swap"
+{
+	T tmp {a};// now we have two copies of a
+	a = b; // now we have two copies of b
+	b = tmp;//now we have two copies of tmp(aka a)
+}
+
+template<class T>
+void swap(T& a,T& b)// "perfect swap"(almost)
+{
+	T tmp {static_cast<T&&>(a)}; // the initialization may write to a
+	a = static_cast<T&&>(b); // the assignment may  write to b
+	b = static_cast<T&&>(tmp);// the assignment may  write to tmp
+}
+
+// the result value of static_cast<T&&>(x) is an rvalue of type T&& for x.
+
+
+
+template<class T> class vector {
+	//...
+	vector(const vector& r);//copy constructor(copy r's representation)
+
+	vector(vector&& r);// move constructor("steal"  representation from r)
+
+};
+vector<string> s;
+vector<string> s2 {s}; // s is an lvalue,so use copy constructor
+vector<string> s3 {s+"tail"};// s+"tail" is an rvalue so pick move constructor
+
+// the standard library provides a move()function:
+// move(x) means static_cast<X&&>(x) where X is the type of x.
+
+template<class T>
+void swap(T& a,T& b)// "perfect swap"(almost)
+{
+	T tmp {move(a)}; // move from a
+	a = move(b); // move from b
+	b = move(tmp);// move from tmp
+}
+
+void
+f(vector<int>& v)
+{
+	swap(v,vector<int>{1,2,3});//repalace v's element with 1,2,3
+}
+
+template<class T> void swap(T&&a,T& b);
+template<class T> void swap(T&a,T&& b);
+
+
+void
+f(string& s,vector<int>& v)
+{
+	s.shrink_to_fit();// make s.capacity() == s.size()
+	swap(s,string{s}); // make s.capacity() == s.size()
+ 	v.clear(); // make v empty
+	swap(v.vector<int>{}); // make v empty
+	v={};//  // make v empty
+}
+
+// References to References
+using rr_i = int&&;
+using lr_i = int&;
+using rr_rr_i = rr_i&&;// "int && &&" is an int&&
+using lr_rr_i = rr_i&; // "int && &" is an int&
+using rr_lr_i = lr_i&&;// "int & &&" is an int&
+using lr_lr_i = lr_i&; // "int & &" is an int&
+
+// lvalue reference always wins.
+// reference collapse
+
+// the syntax does not allow:
+int&& & r = i;
+
+void
+fp(char* p)
+{
+	while(*p)
+		cout<<++*p;
+}
+
+void
+fr(char& r)
+{
+	while(r)
+		cout<<++r;// oops:increments the char referred to,not the reference
+// near-infinite loop!
+}
+
+void
+fr2(char& r)
+{
+ char* p = &r;//get a pointer to the object referred to
+ while(*p)
+	cout<<++*p;
+}
+
+template<class T> class Proxy{
+	T& m;
+public:
+	Proxy(T& mm):m{mm}{ }
+	//...
+};
+
+
+
+template<class T> class Handle{ // Handle refers to its current object
+	T* m;
+public:
+	Handle(T* mm):m{mm}{ }
+	void rebind(T* mm){m = mm;}
+	//...
+};
+
+Matrix operator+(const Matrix&,const Matrix&); // ok
+Matrix operator-(const Matrix*,const Matrix*); // error: no user-defined type argument
+
+
+Matrix y,z;
+//...
+Matrix x = y + z; // ok
+Matrix x2 = &y - &z;// error and ugly
+
+int x,y;
+string& a1[] = {x,y};// error: array of references
+string* a2[] = {&x,&y};//ok
+vector<string&> s1 = {x,y};// error: vector of references
+vector<string*> s2 = {&x,&y};// ok
+
+
+void
+fp(X* p)
+{
+	if(p == nullptr){
+		// no value
+	}else {
+		// use *p
+	}
+}
+
+
+void 
+fr(X& r) // common style
+{
+	//assume  that r is valid and use it
+}
+
+
+void 
+fr2(X& r) 
+{
+
+	if(&r == &nullX){
+		// no value
+	} else {
+		// use r
+	}
+}
+
+char* ident(char* p) {return p;}
+char& r{*ident(nullptr)}; //invalid code
 
 
 

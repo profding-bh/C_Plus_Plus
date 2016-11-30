@@ -1,6 +1,6 @@
 CC=g++
 
-all: test1 test2 test3 test4 test5 test6 test7 test8 test9
+all: test1 test2 test3 test4 test5 test6 test7 test8 test9 test10
 .PHONY:all clean
 
 
@@ -22,5 +22,7 @@ test8:test8.cpp
 	$(CC) -std=gnu++11  test8.cpp -o test8
 test9:test9.cpp
 	$(CC) -std=gnu++11  test9.cpp -o test9
+test10:test10.cpp
+	$(CC) -std=gnu++11 test10.cpp -o test10
 clean:
-	rm test1 test2 test3 test4 test5 test6 test7 test8 test9
+	rm test1 test2 test3 test4 test5 test6 test7 test8 test9 test10
