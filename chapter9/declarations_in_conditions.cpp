@@ -17,9 +17,7 @@ a variable in a condition. Consider:
 if(double d = prim(true)){
 	left /= d;
 	break;
-}
-
-
+}//如果有else分支的话,else分支同样适用于d.其实向这样的做法,你以前从来没有试过吧了.
 
 The scope of d extends from its point of declaration to the end of the statement
 
@@ -42,18 +40,9 @@ if(double d = prim(true)){
 	break;
 }
 //...
-
-
 d = 2.0f;// two unrelated uses of d
 
-
-
-
 如下：
-
-
-
-
 */
 
 int 
