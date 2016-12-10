@@ -72,3 +72,40 @@ so also yields the most compact source code.
 A declaration in a condition must declare and initialize a single variable or const.
 
 */
+
+/*
+
+if something can be stated in the language itself, if should be,and not just 
+mentioned in a comment.
+
+once something has been stated in the language itself,it should not be mentioned
+
+in a comment.
+
+a = b +c;//a becomes b+c
+count++;//increment the counter
+
+
+a well-chosen and well-written set of comments is  an essential part of 
+a good program.
+
+writing good comments can be as difficult as writing the program itself.
+
+it is an art well worth cultivating.
+
+1)don't declare a variable until you have a value to initialize it with.
+2)perfer a switch-statement to an if-statement when there is a choice.
+3)perfer a range-for-statement to a for-statment wheen there is a choice.
+4)perfer a for-statement to a while-statement  when there is an obvious loop variable.
+5)perfer a while-statement to a for-statement when there is no obvious loop variable.
+6) avoid do-statement.
+7)avoid goto(not yet)
+8)keep comments crisp
+9)don't say in comments what can be clearly stated in code.
+10）state intent in comments
+11)maintain a consistent indentation style.
+
+*/
+
+
+
