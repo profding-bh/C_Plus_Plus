@@ -14,6 +14,13 @@ challenging design task: a general N-dimensional  matrix.
 Matrix<T,N> is an N-dimensional matrix of some value type T.
 
 
+divert
+stride
+diagonal
+
+pivoting
+fused
+
 */
 
 
