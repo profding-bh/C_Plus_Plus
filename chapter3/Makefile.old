@@ -1,0 +1,27 @@
+CC=g++
+STD=-std=c++11 #可以这么写
+
+all:hello  detar deposit autotest autotest2 innercode largestFactor
+.PHONE:clean all
+
+
+#hello:hello.cpp 
+#	$(CC) hello.cpp -o hello
+
+largestFactor:largestFactor.cpp
+	$(CC) $< $(STD) -o $@
+innercode:innercode.cpp
+	$(CC) $< -o $@
+autotest2:autotest2.cpp
+	$(CC) $< -o $@
+autotest:autotest.cpp
+	$(CC) $< -o $@
+deposit:deposit.cpp
+	$(CC) $< -o $@
+detar:detar.cpp
+	$(CC) $< -o $@
+hello:hello.cpp
+	$(CC) $< -o $@
+
+clean:
+	rm hello  detar deposit autotest autotest2 innercode largestFactor
