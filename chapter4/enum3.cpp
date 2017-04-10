@@ -1,7 +1,7 @@
 #include<iostream>
 using namespace std;
 
-// 
+// 在设计一个算法时，要时刻记住提高它的效率
 int 
 main()
 {
