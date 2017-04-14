@@ -17,6 +17,8 @@ int compare(const void *a, const void *b)
 {
     int *pa = (int*)a;
     int *pb = (int*)b;
+    cout<<(*pb )- (*pa)<<endl;
+   // return 1;
     return (*pb )- (*pa);  //从大到小排序
 }
 
@@ -26,6 +28,7 @@ int compare2(const void *a, const void *b)
 {
     int *pa = (int*)a;
     int *pb = (int*)b;
+    cout<<(*pa )- (*pb)<<endl;
     return (*pa )- (*pb);  //从小到大排序
 }
 
@@ -77,7 +80,7 @@ main()
 	#endif
 	
 	
-	#if 0
+	#if 1
 	#define N 10
 	cout<<N<<endl;
 	
@@ -101,6 +104,7 @@ main()
 	cout<< 100 * b[0]+10*b[1]+b[2]<<endl; 
 	#endif
 	
+	#if 0
 	int num = 0,max = 10,current;
 	
 	for(int digit = 100;digit > 0; digit /=10){
@@ -112,5 +116,6 @@ main()
 		}
 		
 		cout<<num<<endl;
+		#endif
 	return 0;
 }
