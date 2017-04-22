@@ -1,9 +1,11 @@
 CC=g++
 
-all: test1 test2 test3 test4 test5 test6 test7 test8 test9 test10 recursive queen newoop stackoop
+all: test1 test2 test3 test4 test5 test6 test7 test8 test9 test10 recursive queen newoop stackoop student
 .PHONY:all clean
 
 
+student:student.cpp
+	$(CC) -std=gnu++11  student.cpp -o student
 stackoop:stackoop.cpp
 	$(CC) -std=gnu++11  stackoop.cpp -o stackoop
 newoop:newoop.cpp
