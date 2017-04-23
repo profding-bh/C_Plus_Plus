@@ -10,6 +10,7 @@ enum ret_code{
 /**
 @brief: 原来字符串的处理，不是一遍就可以搞定的。可能同一个字符串，需要进行多遍遍历，
 每一次遍历，判定一种情况。
+@return 转换之后的整数。
 
 */
 int strtoint(char* string)
