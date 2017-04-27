@@ -9,11 +9,11 @@ using namespace std;
 double d1 = 2.3;
 
 //  这种初始化方式第一次见.
-double d2 {2.3}; // a univeral form based on curly-brace-delimited 
+double d2 {2.3}; // a univeral form based on curly-brace-delimited
 
-// initialize.cpp:10:11: warning: extended initializer lists only 
+// initialize.cpp:10:11: warning: extended initializer lists only
 //  available with -std=c++11 or -std=gnu++11
-//  double d2 {2.3}; // a univeral form based on curly-brace-delimited 
+//  double d2 {2.3}; // a univeral form based on curly-brace-delimited
 
 // $(CC) initialize.cpp  -std=c++11 -o initialize
 
@@ -24,7 +24,7 @@ double d2 {2.3}; // a univeral form based on curly-brace-delimited
 
 // must #include<complex>
 complex<double> z=1;
-complex<double> a = {1,2}; // the = is optional with {...}
+//complex<double> a = {1,2}; // the = is optional with {...}
 complex<double> a1 {d1,d2};
 
 
@@ -43,16 +43,16 @@ left uninitialized extremely rare circumstances.
 
 2) Don't introduce a name until you have a suitable value for it.
 
-3)  When defining a variable, you don't actually need to state its type 
+3)  When defining a variable, you don't actually need to state its type
 explicitly when it can be deduced from the initializer:
 
 auto b = true; // a bool
-auto ch = 'x'; // a char  
+auto ch = 'x'; // a char
 auto i = 123; // an int
 auto d = 1.2; // a double
 auto z = sqrt(y);// z has the type of whatever sqrt(y) returns
 
-With auto,we use the = syntax because there is no type conversion 
+With auto,we use the = syntax because there is no type conversion
 involved  that might cause problems.
 
 
@@ -66,7 +66,7 @@ functions without fear of it being modified.
 
 
 <2>constexpr: meaning roughly "to be evaluated at compile time".This is
-used primarily to specify constants, to allow placement of data in memory 
+used primarily to specify constants, to allow placement of data in memory
 where it is unlikely to be corrupted, for performance.
 
 
@@ -104,7 +104,7 @@ const double s1 = sum(v1);
 //error: call to non-constexpr function ‘double sum(const std::vector<double>&)’
 //constexpr double s2 = sum(v1);
 
- 
+
 
 #endif
 
@@ -192,7 +192,7 @@ void print()
 	for(auto x:v){
 		cout << x <<endl;
 	}
-	
+
 	for(auto x:{10,22,33}){
 		cout<<x<<endl;
 	}
@@ -202,7 +202,7 @@ void increment()
 {
 	int v[] = {0,1,2,3,4,5,6,7,8,9};
 
-	// not copy the values from v into variable x,but rather just have x 
+	// not copy the values from v into variable x,but rather just have x
 	// refer to an element.
 	for(auto& x:v){
 		++x;
@@ -218,7 +218,7 @@ void increment()
 
 In a declaration,the unary suffix & means "reference to".
 
-A reference is similar to a pointer,except that you don't need to use a 
+A reference is similar to a pointer,except that you don't need to use a
 prefix * to access the value referred to by the reference.
 
 Also, a reference cannot be made to refer to a different object after its
